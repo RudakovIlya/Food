@@ -48,15 +48,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   showTabContent();
 
-  tabsParent.addEventListener('click', e => {
+  tabsParent.addEventListener('click', e => { // Используем делегирование событий и навешиваем прослушку на родителя наших табов.
 
-    const target = e.target;
+    const target = e.target; // e - это событие которое произошло на элементе,в данном случае это клик.
 
-    if (target && target.closest('.tabheader__item')) {
+    if (target && target.closest('.tabheader__item')) { // Проверяем на то, если наш нажатый элемент имеет в себе класс tabheader__item
 
-      tabs.forEach((item, i) => {
+      tabs.forEach((item, i) => { // Перебираем наши табы.
 
-        if (target == item) {
+        if (target == item) { // Проверяем, если нажатый текущий элемент == текущиму элементу таба, выполням функцию hideTabContent, затем вызываем функцию showTabContetn, котороая выполняет для текущего элемента.
 
           hideTabContent()
 
