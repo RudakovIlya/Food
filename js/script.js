@@ -72,6 +72,33 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Timer
 
+  const deadline = '2022-1-31'; // Deadline, та дата, когда таймер остановится;
 
+  const getTimeRemaining = (endtime) => {
 
+    const total = Date.parse(endtime) - Date.parse(new Date());
+
+    const day = Math.floor(total / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы.
+
+    const hours = Math.floor(total / (1000 * 60 * 60) % 24); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах.
+
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+
+    const seconds = Math.floor((total / 1000) % 60);
+
+    return {
+
+      total,
+
+      day,
+
+      hours,
+
+      minutes,
+
+      seconds,
+
+    }
+
+  }
 })
