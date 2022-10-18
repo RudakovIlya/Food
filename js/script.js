@@ -156,5 +156,3 @@ window.addEventListener('DOMContentLoaded', () => {
   setClock('.timer', deadline)
 
 })
-
-console.log((899.9919444444445 % 24));
