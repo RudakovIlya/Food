@@ -622,7 +622,7 @@ a {
 
 .fade {
   animation-name: fade;
-  animation-duration: 0.8s;
+  animation-duration: 0.5s;
 }
 @keyframes fade {
   from {
