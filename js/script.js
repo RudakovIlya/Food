@@ -72,19 +72,32 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Timer
 
-  const deadline = '2022-1-31'; // Deadline, та дата, когда таймер остановится;
+  const deadline = '2022-12-19'; // Deadline, та дата, когда таймер остановится;
 
   const getTimeRemaining = (endtime) => {
 
     const total = Date.parse(endtime) - Date.parse(new Date());
 
-    const day = Math.floor(total / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы.
+    let day = Math.floor(total / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы.
 
-    const hours = Math.floor(total / (1000 * 60 * 60) % 24); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах.
+    let hours = Math.floor(total / (1000 * 60 * 60) % 24); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах.
 
-    const minutes = Math.floor((total / 1000 / 60) % 60);
+    let minutes = Math.floor((total / 1000 / 60) % 60);
 
-    const seconds = Math.floor((total / 1000) % 60);
+    let seconds = Math.floor((total / 1000) % 60);
+
+    if (total <= 0) {
+
+      day = 0;
+
+      hours = 0;
+
+      minutes = 0;
+
+      seconds = 0;
+
+
+    }
 
     return {
 
@@ -102,9 +115,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   }
 
-  const setClock = () => {
+  const setClock = (selector, endtime) => {
 
-    const timer = document.querySelector('.timer');
+    const timer = document.querySelector(selector);
 
     const days = timer.querySelector('#days');
 
@@ -114,14 +127,32 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const seconds = timer.querySelector('#seconds');
 
-    const interval = setTimeout(updateClock, 1000);
+    const timeInterval = setInterval(updateClock, 1000);
 
-    const updateClock = () => {
+    updateClock();
 
+    function updateClock() {
 
+      const total = getTimeRemaining(endtime);
+
+      days.innerHTML = total.day.toString().padStart(2, "0");
+
+      hours.innerHTML = total.hours.toString().padStart(2, "0");
+
+      minutes.innerHTML = total.minutes.toString().padStart(2, "0");
+
+      seconds.innerHTML = total.seconds.toString().padStart(2, "0");
+
+      if (total.total <= 0) {
+
+        clearInterval(timeInterval);
+
+      }
 
     }
 
   }
+
+  setClock('.timer', deadline)
 
 })
