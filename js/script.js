@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Timer
 
-  const deadline = '2022-11-25'; // Deadline, та дата, когда таймер остановится;
+  const deadline = document.querySelector('.deadline').getAttribute('data-deadline'); // Deadline, та дата, когда таймер остановится;
 
   const getTimeRemaining = (endtime) => {
 
@@ -88,7 +88,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (total <= 0) {
 
-      day = 0;
+      days = 0;
 
       hours = 0;
 
