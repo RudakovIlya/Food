@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const total = Date.parse(endtime) - Date.parse(new Date()); // Вычисляем разницу в миллисекундах, т.е. сколько миллисекунд осталось до deadline.
 
-    let day = Math.floor(total / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 * 24)) ~~ 37 дней.
+    let days = Math.floor(total / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 * 24)) ~~ 37 дней.
 
     let hours = Math.floor(total / (1000 * 60 * 60) % 24); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 ) % 24), в скобках 3 млн 600 тысяч миллисекуд, затем мы делим 3239971000 / 3600000 ~= 899.9919444444445 % 24 = 11.99194444444447
 
@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       total,
 
-      day,
+      days,
 
       hours,
 
@@ -135,7 +135,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const total = getTimeRemaining(endtime);
 
-      days.innerHTML = total.day.toString().padStart(2, "0");
+      days.innerHTML = total.days.toString().padStart(2, "0");
 
       hours.innerHTML = total.hours.toString().padStart(2, "0");
 
