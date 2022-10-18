@@ -101,4 +101,27 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
   }
+
+  const setClock = () => {
+
+    const timer = document.querySelector('.timer');
+
+    const days = timer.querySelector('#days');
+
+    const hours = timer.querySelector('#hours');
+
+    const minutes = timer.querySelector('#minutes');
+
+    const seconds = timer.querySelector('#seconds');
+
+    const interval = setTimeout(updateClock, 1000);
+
+    const updateClock = () => {
+
+
+
+    }
+
+  }
+
 })
