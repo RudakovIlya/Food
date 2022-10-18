@@ -556,10 +556,12 @@ a {
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .modal__dialog {
   max-width: 500px;
   margin: 40px auto;
 }
+
 .modal__content {
   position: relative;
   width: 100%;
@@ -570,6 +572,7 @@ a {
   max-height: 80vh;
   overflow-y: auto;
 }
+
 .modal__close {
   position: absolute;
   top: 8px;
@@ -582,11 +585,13 @@ a {
   background-color: transparent;
   cursor: pointer;
 }
+
 .modal__title {
   text-align: center;
   font-size: 22px;
   text-transform: uppercase;
 }
+
 .modal__input {
   display: block;
   margin: 20px auto 20px auto;
@@ -600,6 +605,7 @@ a {
   padding: 0 20px;
   outline: 0;
 }
+
 .modal .btn {
   display: block;
   width: 280px;
@@ -609,9 +615,11 @@ a {
 .show {
   display: block;
 }
+
 .hide {
   display: none;
 }
+
 .fade {
   animation-name: fade;
   animation-duration: 0.8s;
