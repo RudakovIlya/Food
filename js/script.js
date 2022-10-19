@@ -76,43 +76,41 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const getTimeRemaining = (endtime) => {
 
-    const total = Date.parse(endtime) - Date.parse(new Date()); // Вычисляем разницу в миллисекундах, т.е. сколько миллисекунд осталось до deadline.
+    const totalTimeRemainig = Date.parse(endtime) - Date.parse(new Date()); // Вычисляем разницу в миллисекундах, т.е. сколько миллисекунд осталось до deadline.
 
-    let days = Math.floor(total / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 * 24)) ~~ 37 дней.
+    let totalDays = Math.floor(totalTimeRemainig / (1000 * 60 * 60 * 24));  // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 * 24)) ~~ 18 дней.
 
-    let hours = Math.floor(total / (1000 * 60 * 60) % 24); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 ) % 24), в скобках 3 млн 600 тысяч миллисекуд, затем мы делим 3239971000 / 3600000 ~= 899.9919444444445 % 24 = 11.99194444444447
+    let totalHours = Math.floor(totalTimeRemainig / (1000 * 60 * 60) % 24); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 ) % 24), в скобках 3 млн 600 тысяч миллисекуд, затем мы делим 3239971000 / 3600000 ~= 899.9919444444445 % 24 = 11.99194444444447
 
-    let minutes = Math.floor((total / 1000 / 60) % 60);
+    let totalMinutes = Math.floor(totalTimeRemainig / (1000 * 60) % 60);
 
-    let seconds = Math.floor((total / 1000) % 60);
+    let totalSeconds = Math.floor(totalTimeRemainig / 1000 % 60)
 
-    if (total <= 0) {
+    if (totalTimeRemainig <= 0) {
 
-      days = 0;
+      totalDays = 0;
 
-      hours = 0;
+      totalHours = 0;
 
-      minutes = 0;
+      totalMinutes = 0;
 
-      seconds = 0;
-
+      totalSeconds = 0;
 
     }
 
     return {
 
-      total,
+      totalTimeRemainig,
 
-      days,
+      totalDays,
 
-      hours,
+      totalHours,
 
-      minutes,
+      totalMinutes,
 
-      seconds,
+      totalSeconds,
 
     }
-
   }
 
   const setClock = (selector, endtime) => {
@@ -127,103 +125,32 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const seconds = timer.querySelector('#seconds');
 
-    const timeInterval = setInterval(updateClock, 1000);
-
-    updateClock();
+    const timerId = setInterval(updateClock, 1000);
 
     function updateClock() {
 
-      const total = getTimeRemaining(endtime);
+      const total = getTimeRemaining(endtime)
 
-      days.innerHTML = total.days.toString().padStart(2, "0");
+      days.innerHTML = total.totalDays.toString().padStart(2, '0');
 
-      hours.innerHTML = total.hours.toString().padStart(2, "0");
+      hours.innerHTML = total.totalHours.toString().padStart(2, '0');
 
-      minutes.innerHTML = total.minutes.toString().padStart(2, "0");
+      minutes.innerHTML = total.totalMinutes.toString().padStart(2, '0');
 
-      seconds.innerHTML = total.seconds.toString().padStart(2, "0");
+      seconds.innerHTML = total.totalSeconds.toString().padStart(2, '0');
 
-      if (total.total <= 0) {
+      if (total <= 0) {
 
-        clearInterval(timeInterval);
+        clearInterval(timerId)
 
       }
 
     }
 
-  }
-
-  setClock('.timer', deadline)
-
-  // Modal
-
-  const modalTrigger = document.querySelectorAll('[data-modal]');
-
-  const modal = document.querySelector('.modal');
-
-  const closeTrigger = document.querySelector('[data-close]');
-
-  const body = document.body;
-
-  const showModal = () => {
-
-    modal.classList.add('show', 'fade')
-
-    body.style.overflow = 'hidden';
-
-    clearInterval(modalTimerId);
+    updateClock();
 
   }
 
-  const closeModal = () => {
-
-    modal.classList.remove('show', 'fade')
-
-    body.style.overflow = '';
-
-  }
-
-  modalTrigger.forEach(item => {
-
-    item.addEventListener('click', showModal)
-
-  })
-
-  modal.addEventListener('click', (e) => {
-
-    const target = e.target;
-
-    if (target && target == closeTrigger && modal.classList.contains('show') || target == modal) {
-
-      closeModal();
-
-    }
-
-  });
-
-  document.addEventListener('keydown', (e) => {
-
-    if (e.code == "Escape" && modal.classList.contains('show')) {
-
-      closeModal();
-
-    }
-
-  })
-
-  const modalTimerId = setTimeout(showModal, 30000)
-
-  const showModalByScroll = () => {
-
-    if (window.scrollY + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
-
-      showModal()
-
-      window.removeEventListener('scroll', showModalByScroll)
-
-    }
-  }
-
-  window.addEventListener('scroll', showModalByScroll);
+  setClock('.timer', deadline);
 
 })
