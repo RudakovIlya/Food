@@ -187,7 +187,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  //const timerModal = setTimeout(showModal, 10000);
+  const timerModal = setTimeout(showModal, 10000);
 
   const showModalByScroll = () => {
     if (
