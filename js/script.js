@@ -1,9 +1,9 @@
 'use strict';
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Tabs
+    // Tabs
 
-  /* Подзадачи:
+    /* Подзадачи:
 
     1) Функция, которая будет скрывать табы.
 
@@ -13,243 +13,243 @@ window.addEventListener('DOMContentLoaded', () => {
 
 */
 
-  const tabs = document.querySelectorAll('.tabheader__item');
+    const tabs = document.querySelectorAll('.tabheader__item');
 
-  const tabsContent = document.querySelectorAll('.tabcontent');
+    const tabsContent = document.querySelectorAll('.tabcontent');
 
-  const tabsParent = document.querySelector('.tabheader__items');
+    const tabsParent = document.querySelector('.tabheader__items');
 
-  const hideTabContent = () => {
-    tabsContent.forEach((tabContent) => {
-      tabContent.classList.add('hide'); // Перебираем контент табов и вешаем им класс для скрытия всех элементов.
+    const hideTabContent = () => {
+        tabsContent.forEach((tabContent) => {
+            tabContent.classList.add('hide'); // Перебираем контент табов и вешаем им класс для скрытия всех элементов.
 
-      tabContent.classList.remove('show', 'fade'); // Удаляем классы, которые показываю контет, а так же добавляют анимацию.
+            tabContent.classList.remove('show', 'fade'); // Удаляем классы, которые показываю контет, а так же добавляют анимацию.
+        });
+
+        tabs.forEach((tab) => tab.classList.remove('tabheader__item_active')); // Перебираем наши табы и удаляем класс активности, который выделяет текущий таб
+    };
+
+    const showTabContent = (i = 0) => {
+        // Устанавливаем значение по умолчанию, для того, что при перезагрузке страницы активным был всегда первый таб и его контент
+
+        tabsContent[i].classList.remove('hide'); // Удаляем класс скрывающий контент конкретно у этого таба.
+
+        tabsContent[i].classList.add('show', 'fade'); // Добавляем классы. которые показывают текущий слайд, а так же добавляют анимацию появления
+
+        tabs[i].classList.add('tabheader__item_active'); // Добавляем на текущий таб класс активности
+    };
+
+    hideTabContent();
+
+    showTabContent();
+
+    tabsParent.addEventListener('click', (e) => {
+        // Используем делегирование событий и навешиваем прослушку на родителя наших табов.
+
+        const target = e.target; // e - это событие которое произошло на элементе,в данном случае это клик.
+
+        if (target && target.closest('.tabheader__item')) {
+            // Проверяем на то, если наш нажатый элемент имеет в себе класс tabheader__item
+
+            tabs.forEach((item, i) => {
+                // Перебираем наши табы.
+
+                if (target == item) {
+                    // Проверяем, если нажатый текущий элемент == текущиму элементу таба, выполням функцию hideTabContent, затем вызываем функцию showTabContetn, котороая выполняет для текущего элемента.
+
+                    hideTabContent();
+
+                    showTabContent(i);
+                }
+            });
+        }
     });
 
-    tabs.forEach((tab) => tab.classList.remove('tabheader__item_active')); // Перебираем наши табы и удаляем класс активности, который выделяет текущий таб
-  };
+    // Timer
 
-  const showTabContent = (i = 0) => {
-    // Устанавливаем значение по умолчанию, для того, что при перезагрузке страницы активным был всегда первый таб и его контент
+    const deadline = document
+        .querySelector('.deadline')
+        .getAttribute('data-deadline'); // Deadline, та дата, когда таймер остановится;
 
-    tabsContent[i].classList.remove('hide'); // Удаляем класс скрывающий контент конкретно у этого таба.
+    const getTimeRemaining = (endtime) => {
+        const totalTimeRemainig = Date.parse(endtime) - Date.parse(new Date()); // Вычисляем разницу в миллисекундах, т.е. сколько миллисекунд осталось до deadline.
 
-    tabsContent[i].classList.add('show', 'fade'); // Добавляем классы. которые показывают текущий слайд, а так же добавляют анимацию появления
+        let totalDays = Math.floor(totalTimeRemainig / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 * 24)) ~~ 18 дней.
 
-    tabs[i].classList.add('tabheader__item_active'); // Добавляем на текущий таб класс активности
-  };
+        let totalHours = Math.floor(
+            (totalTimeRemainig / (1000 * 60 * 60)) % 24
+        ); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 ) % 24), в скобках 3 млн 600 тысяч миллисекуд, затем мы делим 3239971000 / 3600000 ~= 899.9919444444445 % 24 = 11.99194444444447
 
-  hideTabContent();
+        let totalMinutes = Math.floor((totalTimeRemainig / (1000 * 60)) % 60);
 
-  showTabContent();
+        let totalSeconds = Math.floor((totalTimeRemainig / 1000) % 60);
 
-  tabsParent.addEventListener('click', (e) => {
-    // Используем делегирование событий и навешиваем прослушку на родителя наших табов.
+        if (totalTimeRemainig <= 0) {
+            totalDays = 0;
 
-    const target = e.target; // e - это событие которое произошло на элементе,в данном случае это клик.
+            totalHours = 0;
 
-    if (target && target.closest('.tabheader__item')) {
-      // Проверяем на то, если наш нажатый элемент имеет в себе класс tabheader__item
+            totalMinutes = 0;
 
-      tabs.forEach((item, i) => {
-        // Перебираем наши табы.
-
-        if (target == item) {
-          // Проверяем, если нажатый текущий элемент == текущиму элементу таба, выполням функцию hideTabContent, затем вызываем функцию showTabContetn, котороая выполняет для текущего элемента.
-
-          hideTabContent();
-
-          showTabContent(i);
+            totalSeconds = 0;
         }
-      });
-    }
-  });
 
-  // Timer
+        return {
+            totalTimeRemainig,
 
-  const deadline = document
-    .querySelector('.deadline')
-    .getAttribute('data-deadline'); // Deadline, та дата, когда таймер остановится;
+            totalDays,
 
-  const getTimeRemaining = (endtime) => {
-    const totalTimeRemainig = Date.parse(endtime) - Date.parse(new Date()); // Вычисляем разницу в миллисекундах, т.е. сколько миллисекунд осталось до deadline.
+            totalHours,
 
-    let totalDays = Math.floor(totalTimeRemainig / (1000 * 60 * 60 * 24)); // Получаем дни, где 1000 - это миллисекунды, 60 - секунды, 60 - минуты, 24 - часы. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 * 24)) ~~ 18 дней.
+            totalMinutes,
 
-    let totalHours = Math.floor(
-      (totalTimeRemainig / (1000 * 60 * 60)) % 24
-    ); // Получаем часы, где 1000 - это миллисекунды, 60 - секунды, 60 минуты,  % 24 - это мы получаем, остаток от суток в часах. Выходит подобная формула ~ (3239971000 / (1000 * 60 * 60 ) % 24), в скобках 3 млн 600 тысяч миллисекуд, затем мы делим 3239971000 / 3600000 ~= 899.9919444444445 % 24 = 11.99194444444447
-
-    let totalMinutes = Math.floor((totalTimeRemainig / (1000 * 60)) % 60);
-
-    let totalSeconds = Math.floor((totalTimeRemainig / 1000) % 60);
-
-    if (totalTimeRemainig <= 0) {
-      totalDays = 0;
-
-      totalHours = 0;
-
-      totalMinutes = 0;
-
-      totalSeconds = 0;
-    }
-
-    return {
-      totalTimeRemainig,
-
-      totalDays,
-
-      totalHours,
-
-      totalMinutes,
-
-      totalSeconds,
+            totalSeconds,
+        };
     };
-  };
 
-  const setClock = (selector, endtime) => {
-    const timer = document.querySelector(selector);
+    const setClock = (selector, endtime) => {
+        const timer = document.querySelector(selector);
 
-    const days = timer.querySelector('#days');
+        const days = timer.querySelector('#days');
 
-    const hours = timer.querySelector('#hours');
+        const hours = timer.querySelector('#hours');
 
-    const minutes = timer.querySelector('#minutes');
+        const minutes = timer.querySelector('#minutes');
 
-    const seconds = timer.querySelector('#seconds');
+        const seconds = timer.querySelector('#seconds');
 
-    const timerId = setInterval(updateClock, 1000);
+        const timerId = setInterval(updateClock, 1000);
 
-    function updateClock() {
-      const total = getTimeRemaining(endtime);
+        function updateClock() {
+            const total = getTimeRemaining(endtime);
 
-      days.innerHTML = total.totalDays.toString().padStart(2, '0');
+            days.innerHTML = total.totalDays.toString().padStart(2, '0');
 
-      hours.innerHTML = total.totalHours.toString().padStart(2, '0');
+            hours.innerHTML = total.totalHours.toString().padStart(2, '0');
 
-      minutes.innerHTML = total.totalMinutes.toString().padStart(2, '0');
+            minutes.innerHTML = total.totalMinutes.toString().padStart(2, '0');
 
-      seconds.innerHTML = total.totalSeconds.toString().padStart(2, '0');
+            seconds.innerHTML = total.totalSeconds.toString().padStart(2, '0');
 
-      if (total <= 0) {
-        clearInterval(timerId);
-      }
-    }
+            if (total <= 0) {
+                clearInterval(timerId);
+            }
+        }
 
-    updateClock();
-  };
+        updateClock();
+    };
 
-  setClock('.timer', deadline);
+    setClock('.timer', deadline);
 
-  // Modal
+    // Modal
 
-  const modalTrigger = document.querySelectorAll('[data-modal]');
+    const modalTrigger = document.querySelectorAll('[data-modal]');
 
-  const modal = document.querySelector('.modal');
+    const modal = document.querySelector('.modal');
 
-  const closeTrigger = document.querySelector('[data-close]');
+    const closeTrigger = document.querySelector('[data-close]');
 
-  const body = document.body;
+    const body = document.body;
 
-  const showModal = () => {
-    modal.classList.add('show', 'fade');
+    const showModal = () => {
+        modal.classList.add('show', 'fade');
 
-    body.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
 
-    clearInterval(timerModal);
-  };
+        clearInterval(timerModal);
+    };
 
-  const closeModal = () => {
-    modal.classList.remove('show', 'fade');
+    const closeModal = () => {
+        modal.classList.remove('show', 'fade');
 
-    body.style.overflow = '';
-  };
+        body.style.overflow = '';
+    };
 
-  modalTrigger.forEach((trigger) => {
-    trigger.addEventListener('click', showModal);
-  });
+    modalTrigger.forEach((trigger) => {
+        trigger.addEventListener('click', showModal);
+    });
 
-  modal.addEventListener('click', (e) => {
-    const target = e.target;
-    if (
-      (target &&
-        target == closeTrigger &&
-        modal.classList.contains('show')) ||
-      target == modal
-    ) {
-      closeModal();
-    }
-  });
+    modal.addEventListener('click', (e) => {
+        const target = e.target;
+        if (
+            (target &&
+                target == closeTrigger &&
+                modal.classList.contains('show')) ||
+            target == modal
+        ) {
+            closeModal();
+        }
+    });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.code == 'Escape' && modal.classList.contains('show')) {
-      closeModal();
-    }
-  });
+    document.addEventListener('keydown', (e) => {
+        if (e.code == 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
 
-  const timerModal = setTimeout(showModal, 10000);
+    const timerModal = setTimeout(showModal, 10000);
 
-  const showModalByScroll = () => {
-    if (
-      window.scrollY + document.documentElement.clientHeight >=
-      document.documentElement.scrollHeight
-    ) {
-      showModal();
+    const showModalByScroll = () => {
+        if (
+            window.scrollY + document.documentElement.clientHeight >=
+            document.documentElement.scrollHeight
+        ) {
+            showModal();
 
-      window.removeEventListener('scroll', showModalByScroll);
-    }
-  };
-  window.addEventListener('scroll', showModalByScroll);
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    };
+    window.addEventListener('scroll', showModalByScroll);
 
-  // Используем классы для карточек.
+    // Используем классы для карточек.
 
-  class Menu {
+    class Menu {
+        constructor(
+            src /*src img*/,
+            alt /*alt img*/,
+            title /*title card*/,
+            descr /*descr card*/,
+            price,
+            parentSelector /*parent card*/,
+            ...classes /*default class*/
+        ) {
+            this.src = src;
 
-    constructor(src/*src img*/, alt/*alt img*/, title/*title card*/, descr/*descr card*/, price, parentSelector/*parent card*/, ...classes/*default class*/) {
+            this.alt = alt;
 
-      this.src = src;
+            this.title = title;
 
-      this.alt = alt;
+            this.price = price;
 
-      this.title = title;
+            this.descr = descr;
 
-      this.price = price;
+            this.parentSelector = document.querySelector(parentSelector);
 
-      this.descr = descr;
+            this.classes = classes;
 
-      this.parentSelector = document.querySelector(parentSelector);
+            this.transfer = 60;
 
-      this.classes = classes;
+            this.changeToRU();
+        }
 
-      this.transfer = 60;
+        changeToRU() {
+            this.price = this.price * this.transfer; // Метод конвертации доллара в рубли
+        }
 
-      this.changeToRU();
+        render() {
+            const element = document.createElement('div');
 
-    }
+            if (!this.classes.length) {
+                this.classes = 'menu__item';
 
-    changeToRU() {
+                element.classList.add(this.classes);
+            } else {
+                this.classes.forEach((className) =>
+                    element.classList.add(className)
+                );
+            }
 
-      this.price = this.price * this.transfer; // Метод конвертации доллара в рубли
-
-    }
-
-    render() {
-
-      const element = document.createElement('div');
-
-      if (!this.classes.length) {
-
-        this.classes = 'menu__item';
-
-        element.classList.add(this.classes);
-
-      } else {
-
-        this.classes.forEach(className => element.classList.add(className));
-
-      }
-
-      element.innerHTML = `
+            element.innerHTML = `
           <img src=${this.src} alt=${this.alt}>
           <h3 class="menu__item-subtitle">${this.title}</h3>
           <div class="menu__item-descr">${this.descr}</div>
@@ -258,61 +258,51 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="menu__item-cost">Цена:</div>
             <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
           </div>
-      `
+      `;
 
-      this.parentSelector.append(element);
-
+            this.parentSelector.append(element);
+        }
     }
 
-  }
+    new Menu(
+        'img/tabs/vegy.webp',
 
-  new Menu(
+        'vegy',
 
-    'img/tabs/vegy.webp',
+        'Меню "Фитнес"',
 
-    'vegy',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
 
-    'Меню "Фитнес"',
+        9,
 
-    'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        '.menu .container'
+    ).render();
 
-    9,
+    new Menu(
+        'img/tabs/elite.webp',
 
-    '.menu .container',
+        'elite',
 
-  ).render();
+        'Меню “Премиум”',
 
-  new Menu(
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
 
-    'img/tabs/elite.webp',
+        15,
 
-    'elite',
+        '.menu .container'
+    ).render();
 
-    'Меню “Премиум”',
+    new Menu(
+        'img/tabs/post.webp',
 
-    'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        'post',
 
-    15,
+        'Меню "Постное"',
 
-    '.menu .container',
+        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
 
-  ).render();
+        6,
 
-  new Menu(
-
-    'img/tabs/post.webp',
-
-    'post',
-
-    'Меню "Постное"',
-
-    'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-
-    6,
-
-    '.menu .container',
-
-  ).render()
-
+        '.menu .container'
+    ).render();
 });
-
